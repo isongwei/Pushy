@@ -7,23 +7,47 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View,TouchableOpacity} from 'react-native';
+import _updateConfig from './update.json';
+import {
+  isFirstTime,
+  isRolledBack,
+  packageVersion,
+  currentVersion,
+  checkUpdate,
+  downloadUpdate,
+  switchVersion,
+  switchVersionLater,
+  markSuccess,
+} from 'react-native-update';
+const {appKey} = _updateConfig[Platform.OS];
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
 type Props = {};
 export default class App extends Component<Props> {
+
+  syncImmediate(){
+    checkUpdate(appKey)
+    .then(info => {
+
+      alert(JSON.stringify(info));
+    })
+
+
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+      <TouchableOpacity onPress = {()=>{
+        this.syncImmediate()
+      }}>
+        <Text>
+          检查更新
+        </Text>
+        </TouchableOpacity>   
+        <Text style={styles.instructions}>热更新</Text>
       </View>
     );
   }
